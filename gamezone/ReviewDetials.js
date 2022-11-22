@@ -1,6 +1,7 @@
 import React from 'react';
-import {View, Text} from 'react-native';
-import {globalStyle} from './styles/globalStyle';
+import {View, Text, Image} from 'react-native';
+import {globalStyle, image} from './styles/globalStyle';
+import Card from './shares/Card';
 
 export default function ReviewDetials({route}) {
   const {params} = route || {};
@@ -8,10 +9,14 @@ export default function ReviewDetials({route}) {
   const {title, name, rating, price} = params;
   return (
     <View style={globalStyle.container}>
-      <Text> {title} </Text>
-      <Text> {name} </Text>
-      <Text> {rating}</Text>
-      <Text> {price} </Text>
+      <Card>
+        <Text> {title} </Text>
+        <Text> {name} </Text>
+        <Text> {price} </Text>
+        <View>
+          <Image source={image.ratings[rating]} />
+        </View>
+      </Card>
     </View>
   );
 }
