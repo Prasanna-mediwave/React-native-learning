@@ -1,7 +1,18 @@
 import React, {useState} from 'react';
-import {FlatList, TouchableOpacity, View, Text, Modal} from 'react-native';
+import {
+  FlatList,
+  TouchableOpacity,
+  View,
+  Text,
+  Modal,
+  StyleSheet,
+  TouchableWithoutFeedback,
+  Keyboard,
+} from 'react-native';
+import ReviewForm from './ReviewForm';
 import Card from './shares/Card';
 import {globalStyle} from './styles/globalStyle';
+import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 
 export default function Home({navigation}) {
   const [modal, setModal] = useState(false);
@@ -35,15 +46,36 @@ export default function Home({navigation}) {
       price: '4,000',
     },
   ]);
+
+  const addReview = review => {
+    review.key = Math.random().toString();
+    setReview(currentReviews => {
+      return [review, ...currentReviews];
+    });
+    setModal(false);
+  };
+  const deletHandler = key => {
+    setReview(prevTodos => {
+      return prevTodos.filter(delItem => delItem.key !== key);
+    });
+  };
+
   return (
     <View style={globalStyle.container}>
-      <Modal visible={modal}>
-        <TouchableOpacity onPress={() => setModal(false)}>
-          <Text> X </Text>
-        </TouchableOpacity>
+      <Modal visible={modal} animationType="slide">
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={globalStyle.container}>
+            <TouchableOpacity onPress={() => setModal(false)}>
+              <MaterialIcons name="clear" size={20} />
+            </TouchableOpacity>
+            <ReviewForm addReview={addReview} />
+          </View>
+        </TouchableWithoutFeedback>
       </Modal>
-      <TouchableOpacity onPress={() => setModal(true)}>
-        <Text> + </Text>
+      <TouchableOpacity
+        onPress={() => setModal(true)}
+        style={globalStyle.addBtn}>
+        <MaterialIcons name="add-circle-outline" size={30} />
       </TouchableOpacity>
       <FlatList
         data={review}
@@ -51,9 +83,16 @@ export default function Home({navigation}) {
           <TouchableOpacity
             onPress={() => navigation.navigate('ReviewDetials', item)}>
             <Card>
-              <Text style={{fontFamily: 'GreatVibes-Regular', fontSize: 20}}>
-                {item.title}
-              </Text>
+              <View style={styles.cardWarp}>
+                <View>
+                  <Text style={styles.Text}>{item.title}</Text>
+                </View>
+                <View>
+                  <TouchableOpacity onPress={() => deletHandler(item.key)}>
+                    <MaterialIcons name="clear" size={20} />
+                  </TouchableOpacity>
+                </View>
+              </View>
             </Card>
           </TouchableOpacity>
         )}
@@ -62,3 +101,21 @@ export default function Home({navigation}) {
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  Text: {
+    fontFamily: 'Kanit-Bold',
+    fontSize: 20,
+    fontWeight: 'bold',
+  },
+  cardWarp: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+  },
+  delText: {
+    padding: 5,
+    borderRadius: 25,
+    fontSize: 15,
+  },
+});

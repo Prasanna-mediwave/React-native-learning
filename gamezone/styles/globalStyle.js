@@ -2,8 +2,20 @@ import {StyleSheet} from 'react-native';
 
 export const globalStyle = StyleSheet.create({
   container: {
+    flexDirection: 'column',
     flex: 1,
     padding: 20,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#ddd',
+    padding: 10,
+    fontSize: 18,
+    borderRadius: 6,
+    margin: 10,
+  },
+  addBtn: {
+    alignItems: 'center',
   },
 });
 

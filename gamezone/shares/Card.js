@@ -11,11 +11,9 @@ export default function Card(props) {
 
 const styles = StyleSheet.create({
   cardContainer: {
-    backgroundColor: 'red',
     padding: 10,
   },
   cardText: {
     padding: 15,
-    backgroundColor: 'blue',
   },
 });
